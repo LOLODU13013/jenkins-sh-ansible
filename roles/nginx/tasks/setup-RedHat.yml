@@ -4,11 +4,11 @@
   dnf:
    name: nginx
    state: present
-- name: Arret et desactivation du server apache
-  systemd:
-   name: httpd
-   state: stopped
-   enabled: no
+# - name: Arret et desactivation du server apache
+#  systemd:
+#   name: httpd
+#   state: stopped
+#   enabled: no
 - name: "Creation rep /var/www/{{ item }}/html"
   file:
    path: /var/www/{{ item }}/html
