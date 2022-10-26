@@ -1,0 +1,55 @@
+---
+
+- name: Installation de nginx
+  apt:
+   name: nginx
+   state: present
+
+- name: "Creation rep /var/www/{{ item }}/html"
+  file:
+   path: /var/www/{{ item }}/html
+   state: directory
+   mode: '0755'
+   owner: root
+   group: root
+   recurse: yes
+  loop:
+    "{{ sites }}"
+
+- name: Creation des fichiers index.html a partir de modele
+  template:
+   src: index.j2
+   dest: /var/www/{{ item }}/html/index.html
+  loop:
+    "{{ sites }}"
+
+- name: Creation des repertoire pour les sites web
+  file:
+   path: /etc/nginx/sites-{{ item }}
+   state: directory
+  loop:
+   - available
+   - enabled
+
+- name:  Modification nginx.conf
+  lineinfile:
+   path: /etc/nginx/nginx.conf
+   insertbefore: '^# Settings'
+   line: '    include /etc/nginx/sites-enabled/*.conf;'
+
+- name: Creation des fichiers de conf des sites a partir de modele
+  template:
+    src: site-debian.j2
+    dest: /etc/nginx/sites-available/{{ item }}.conf
+  loop:
+    "{{ sites }}"
+
+- name: Activation des sites
+  file:
+   src: /etc/nginx/sites-available/{{ item }}.conf
+   dest: /etc/nginx/sites-enabled/{{ item }}.conf
+   state: link
+  loop:
+    "{{ sites }}"
+  notify:
+    - restart nginx

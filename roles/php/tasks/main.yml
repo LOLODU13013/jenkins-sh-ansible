@@ -1,0 +1,10 @@
+---
+
+
+- name: installation de php
+  dnf:
+   name: php
+   state: present
+  notify:
+    - restart nginx
+

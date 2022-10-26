@@ -1,0 +1,5 @@
+---
+# vars file for nginx
+sites:
+  - ipssi.dev
+  - ipssi.form
