@@ -1,6 +1,6 @@
 ---
 
-- hosts: web
+- hosts: 10.0.0.170
   
   roles:
     - roles/nginx

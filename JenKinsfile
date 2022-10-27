@@ -2,7 +2,11 @@ node{
       stage('Clone') {
           checkout scm
       }
-      stage('install_mariadb') {
-	sh "ansible-playbook -i inventaire playbook.yaml"
+      stage('Ansible') {
+        ansiblePlaybook (
+            inventory: 'hosts.yaml',
+            playbook: 'playbook.yaml',
+            colorized: true,
+        )
       }
 }
